@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Objednávka</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: url('BACK.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.95);
+      width: 90%;
+      max-width: 500px;
+      margin: 60px auto;
+      padding: 30px 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 6vw;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 5vw;
+    }
+
+    input[type="text"] {
+      font-size: 5vw;
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      border: 1px solid #aaa;
+      border-radius: 8px;
+    }
+
+    button {
+      font-size: 5vw;
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    @media (min-width: 600px) {
+      h1, p, input, button {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1 id="productName">Načítání...</h1>
+    <p id="productPrice">Cena: </p>
+    <input type="text" id="nickname" placeholder="Zadejte přezdívku">
+    <br>
+    <button onclick="goToPay()">Zaplatit</button>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('product') || "Produkt";
+    const price = urlParams.get('amount') || "0";
+    const payid = urlParams.get('id') || "";
+    const returnUrl = urlParams.get('return') || "";
+
+    document.getElementById('productName').innerText = name;
+    document.getElementById('productPrice').innerText = "Cena: " + price + " Kč";
+
+    function goToPay() {
+      const nick = document.getElementById('nickname').value.trim();
+      if (!nick) {
+        alert("Zadejte prosím přezdívku.");
+        return;
+      }
+      const redirect = `https://www.gopay.cz/pay/?id=${payid}&amount=${price}&note=${encodeURIComponent(nick)}&return=${encodeURIComponent(returnUrl)}`;
+      window.location.href = redirect;
+    }
+  </script>
+</body>
+</html>
