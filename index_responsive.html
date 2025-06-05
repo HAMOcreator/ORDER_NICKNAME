@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -6,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Objednávka</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik+Moonrocks&display=swap');
+
     body {
       margin: 0;
       padding: 0;
@@ -29,7 +30,18 @@
     h1 {
       font-size: 6vw;
       margin-bottom: 10px;
+      font-family: 'Rubik Moonrocks', cursive;
     }
+
+    .type-label {
+      font-size: 5vw;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .type-standard { color: #28a745; } /* zelená */
+    .type-sale { color: #dc3545; }     /* červená */
+    .type-reward { color: #6f42c1; }   /* fialová */
 
     p {
       margin-bottom: 20px;
@@ -61,7 +73,7 @@
     }
 
     @media (min-width: 600px) {
-      h1, p, input, button {
+      h1, p, input, button, .type-label {
         font-size: 24px;
       }
     }
@@ -70,6 +82,7 @@
 <body>
   <div class="overlay">
     <h1 id="productName">Načítání...</h1>
+    <div id="productType" class="type-label"></div>
     <p id="productPrice">Cena: </p>
     <input type="text" id="nickname" placeholder="Zadejte přezdívku">
     <br>
@@ -82,9 +95,22 @@
     const price = urlParams.get('amount') || "0";
     const payid = urlParams.get('id') || "";
     const returnUrl = urlParams.get('return') || "";
+    const type = urlParams.get('type') || "standard";
 
     document.getElementById('productName').innerText = name;
     document.getElementById('productPrice').innerText = "Cena: " + price + " Kč";
+
+    const typeElem = document.getElementById('productType');
+    if (type.toLowerCase() === 'sale') {
+      typeElem.innerText = '🔖 SALE';
+      typeElem.classList.add('type-sale');
+    } else if (type.toLowerCase() === 'reward') {
+      typeElem.innerText = '🏱 REWARD';
+      typeElem.classList.add('type-reward');
+    } else {
+      typeElem.innerText = '✅ STANDARD';
+      typeElem.classList.add('type-standard');
+    }
 
     function goToPay() {
       const nick = document.getElementById('nickname').value.trim();
