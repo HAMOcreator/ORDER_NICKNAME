@@ -39,9 +39,9 @@
       font-weight: bold;
     }
 
-    .type-standard { color: #28a745; } /* zelená */
-    .type-sale { color: #dc3545; }     /* červená */
-    .type-reward { color: #6f42c1; }   /* fialová */
+    .type-standard { color: #28a745; }
+    .type-sale { color: #dc3545; }
+    .type-reward { color: #6f42c1; }
 
     p {
       margin-bottom: 20px;
@@ -81,36 +81,18 @@
 </head>
 <body>
   <div class="overlay">
-    <h1 id="productName">Načítání...</h1>
-    <div id="productType" class="type-label"></div>
-    <p id="productPrice">Cena: </p>
+    <h1 id="productName">💧 Neperlivá voda</h1>
+    <div id="productType" class="type-label type-standard">✅ STANDARD</div>
+    <p id="productPrice">Cena: 35 Kč</p>
     <input type="text" id="nickname" placeholder="Zadejte přezdívku">
     <br>
     <button onclick="goToPay()">Zaplatit</button>
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const name = urlParams.get('product') || "Produkt";
-    const price = urlParams.get('amount') || "0";
-    const payid = urlParams.get('id') || "";
-    const returnUrl = urlParams.get('return') || "";
-    const type = urlParams.get('type') || "standard";
-
-    document.getElementById('productName').innerText = name;
-    document.getElementById('productPrice').innerText = "Cena: " + price + " Kč";
-
-    const typeElem = document.getElementById('productType');
-    if (type.toLowerCase() === 'sale') {
-      typeElem.innerText = '🔖 SALE';
-      typeElem.classList.add('type-sale');
-    } else if (type.toLowerCase() === 'reward') {
-      typeElem.innerText = '🏱 REWARD';
-      typeElem.classList.add('type-reward');
-    } else {
-      typeElem.innerText = '✅ STANDARD';
-      typeElem.classList.add('type-standard');
-    }
+    const product = "Neperlivá voda";
+    const price = 35;
+    const returnUrl = "https://hamocreator.github.io/THANK_YOU/party_final_index.html";
 
     function goToPay() {
       const nick = document.getElementById('nickname').value.trim();
@@ -118,8 +100,11 @@
         alert("Zadejte prosím přezdívku.");
         return;
       }
-      const redirect = `https://www.gopay.cz/pay/?id=${payid}&amount=${price}&note=${encodeURIComponent(nick)}&return=${encodeURIComponent(returnUrl)}`;
-      window.location.href = redirect;
+
+      const amountInHalers = price * 100;
+      const comgateUrl = `https://payments.comgate.cz/v1.0/create?price=${amountInHalers}&label=${encodeURIComponent(nick)}&name=${encodeURIComponent(product)}&redirect=${encodeURIComponent(returnUrl)}&currency=CZK&country=cz&method=ALL`;
+
+      window.location.href = comgateUrl;
     }
   </script>
 </body>
