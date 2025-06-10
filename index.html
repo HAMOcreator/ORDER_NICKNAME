@@ -73,51 +73,15 @@
   </div>
 
   <script>
-    async function goToPay() {
+    function goToPay() {
       const nick = document.getElementById('nickname').value.trim();
       if (!nick) {
         alert("Zadejte prosím přezdívku.");
         return;
       }
 
-      const product = "Neperlivá voda";
-      const price = 35 * 100; // v haléřích
-      const returnUrl = "https://hamocreator.github.io/THANK_YOU/party_final_index.html";
-      const label = `${product} / ${nick}`;
-
-      const data = new URLSearchParams();
-      data.append("merchant", "495742");
-      data.append("secret", "kpdj7DaJ7v6SHSsazlFc0g2NHzL4T4WZ");
-      data.append("price", price);
-      data.append("curr", "CZK");
-      data.append("label", label);
-      data.append("method", "ALL");
-      data.append("redirect", returnUrl);
-
-      try {
-        const response = await fetch("https://payments.comgate.cz/v1.0/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: data
-        });
-
-        const text = await response.text();
-        console.log("Odpověď ComGate:", text); // ← ladicí výpis
-
-        if (text.includes("code=0")) {
-          const urlMatch = text.match(/transurl=([^&\n]+)/);
-          if (urlMatch) {
-            window.location.href = decodeURIComponent(urlMatch[1]);
-          } else {
-            alert("Nepodařilo se získat platební odkaz.");
-          }
-        } else {
-          alert("Chyba při vytváření platby:\n" + text);
-        }
-      } catch (error) {
-        alert("Došlo k chybě při komunikaci s ComGate.");
-        console.error(error);
-      }
+      const redirectUrl = `/api/redirect?nickname=${encodeURIComponent(nick)}`;
+      window.location.href = redirectUrl;
     }
   </script>
 </body>
