@@ -102,6 +102,8 @@
         });
 
         const text = await response.text();
+        console.log("Odpověď ComGate:", text); // ← ladicí výpis
+
         if (text.includes("code=0")) {
           const urlMatch = text.match(/transurl=([^&\n]+)/);
           if (urlMatch) {
